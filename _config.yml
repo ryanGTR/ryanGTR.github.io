@@ -1,0 +1,23 @@
+title: Ryan 的交付鏈筆記
+description: OpenShift／Tekton／Harbor／供應鏈安全——在自己的筆電上把企業交付鏈拆開來看。
+author: Ryan Chen
+lang: zh-Hant
+url: https://ryanGTR.github.io
+theme: minima
+minima:
+  date_format: "%Y-%m-%d"
+  social_links:
+    github: ryanGTR
+header_pages:
+  - about.md
+show_excerpts: true
+permalink: /:year/:month/:title/
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+exclude:
+  - README.md
