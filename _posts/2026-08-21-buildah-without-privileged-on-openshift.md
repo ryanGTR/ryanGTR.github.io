@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "OpenShift 上的 Tekton buildah 不需要 privileged：SCC、SETFCAP 與 vfs"
-date: 2026-08-21 17:30:00 +0800
+date: 2026-08-21 14:30:00 +0800
 tags: [tekton, openshift, buildah, security]
 excerpt: "IBM Cloud-Native Toolkit 的 build task 預設 privileged: true。在沒有 privileged SCC 的 SA 上會 PodAdmissionFailed；其實只要 SETFCAP 加 vfs storage driver 就能跑。"
 ---

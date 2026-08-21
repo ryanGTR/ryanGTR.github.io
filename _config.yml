@@ -21,3 +21,5 @@ plugins:
   - jekyll-seo-tag
 exclude:
   - README.md
+future: true
+timezone: Asia/Taipei

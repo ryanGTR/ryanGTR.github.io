@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "tkn pipeline start --showlog 會讓 Jenkins 永遠綠"
-date: 2026-08-21 17:00:00 +0800
+date: 2026-08-21 14:00:00 +0800
 tags: [tekton, jenkins, openshift]
 excerpt: "Jenkins 用 tkn 觸發 Tekton 是很常見的組合。--showlog 把 log 串回來很方便，但它不會把 PipelineRun 的失敗變成非零 exit code——Jenkins 看到的永遠是 SUCCESS。"
 ---

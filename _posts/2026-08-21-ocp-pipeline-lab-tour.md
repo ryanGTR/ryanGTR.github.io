@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "用 CRC 在筆電上重現一條企業 OpenShift 交付鏈"
-date: 2026-08-21 18:00:00 +0800
+date: 2026-08-21 15:00:00 +0800
 tags: [openshift, tekton, harbor, jenkins, gitops, lab]
 excerpt: "Jenkins 帶參數建置 → Tekton 11 個 task → Harbor → GitOps repo，加上變更單號閘門與人工放行。一台有 CRC 的機器，make up，十五分鐘。"
 ---
