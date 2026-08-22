@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ryangtr.github.io/sitemap.xml
