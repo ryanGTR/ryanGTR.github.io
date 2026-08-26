@@ -12,7 +12,7 @@ The recurring theme is claim-versus-measurement. Content is primarily in Traditi
 
 ## 文章 / Articles
 
-- [tkn pipeline start --showlog 會讓 Jenkins 永遠綠](https://ryangtr.github.io/2026/08/tkn-showlog-false-green/): Tekton CLI 的 `--showlog` 不會把 PipelineRun 的失敗轉成非零 exit code，Jenkins 因此永遠顯示 SUCCESS。對應 upstream issue tektoncd/cli#2156，含繞法。A false-green CI failure mode when Jenkins triggers Tekton via `tkn --showlog`.
+- [tkn pipeline start --showlog 會讓 Jenkins 永遠綠](https://ryangtr.github.io/2026/08/tkn-showlog-false-green/): Tekton CLI 的 `--showlog` 不會把 PipelineRun 的失敗轉成非零 exit code，Jenkins 因此永遠顯示 SUCCESS。含成因與修法。A false-green CI failure mode when Jenkins triggers Tekton via `tkn --showlog`.
 - [OpenShift 上的 Tekton buildah 不需要 privileged：SCC、SETFCAP 與 vfs](https://ryangtr.github.io/2026/08/buildah-without-privileged-on-openshift/): IBM Cloud-Native Toolkit 的 build task 預設 `privileged: true`，在沒有 privileged SCC 的 ServiceAccount 上會 PodAdmissionFailed；實測只要 SETFCAP capability 加 vfs storage driver 就能跑。Running buildah in Tekton without a privileged SCC.
 - [用 CRC 在筆電上重現一條企業 OpenShift 交付鏈](https://ryangtr.github.io/2026/08/ocp-pipeline-lab-tour/): Jenkins 帶參數建置 → Tekton 11 個 task → Harbor → GitOps repo，加上變更單號閘門與人工放行，`make up` 十五分鐘起一整套。Reproducing a bank-style OpenShift delivery pipeline on CodeReady Containers.
 - [儀表板全綠，四件事還是錯的：OpenShift AI 驗收實錄](https://ryangtr.github.io/2026/08/four-green-lights-that-lie/): Open Data Hub 3.5 + KServe 全程綠燈，逐條驗證後發現四件事是錯的——其中最關鍵的是「Pod 拿到 GPU ≠ 模型算在 GPU 上」，只有 `nvidia-smi --query-compute-apps` 分得出來。Four things that were wrong despite an all-green MLOps dashboard.
