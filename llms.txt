@@ -1,0 +1,36 @@
+# Ryan 的交付鏈筆記 / Ryan's Delivery Chain Notes
+
+> 金融業 IT 工程師的公開實驗紀錄：在一台筆電上重現企業級 OpenShift／Tekton／Harbor 交付鏈，
+> 拆解每一格為什麼會壞。所有內容為單機 lab 實測，可完整重現，不含任何特定組織的設定或資料。
+> A finance-industry platform engineer's public lab notes: reproducing an enterprise OpenShift /
+> Tekton / Harbor delivery chain on a single laptop, and taking apart why each stage breaks.
+> Everything is measured on a reproducible single-machine lab.
+
+本站的共同主題是「**宣稱 vs 實測**」：每篇都是先預測、再實測、被打臉、然後想懂為什麼。
+內容多為繁體中文，主題在中文技術圈少有一手紀錄。
+The recurring theme is claim-versus-measurement. Content is primarily in Traditional Chinese.
+
+## 文章 / Articles
+
+- [tkn pipeline start --showlog 會讓 Jenkins 永遠綠](https://ryangtr.github.io/2026/08/tkn-showlog-false-green/): Tekton CLI 的 `--showlog` 不會把 PipelineRun 的失敗轉成非零 exit code，Jenkins 因此永遠顯示 SUCCESS。對應 upstream issue tektoncd/cli#2156，含繞法。A false-green CI failure mode when Jenkins triggers Tekton via `tkn --showlog`.
+- [OpenShift 上的 Tekton buildah 不需要 privileged：SCC、SETFCAP 與 vfs](https://ryangtr.github.io/2026/08/buildah-without-privileged-on-openshift/): IBM Cloud-Native Toolkit 的 build task 預設 `privileged: true`，在沒有 privileged SCC 的 ServiceAccount 上會 PodAdmissionFailed；實測只要 SETFCAP capability 加 vfs storage driver 就能跑。Running buildah in Tekton without a privileged SCC.
+- [用 CRC 在筆電上重現一條企業 OpenShift 交付鏈](https://ryangtr.github.io/2026/08/ocp-pipeline-lab-tour/): Jenkins 帶參數建置 → Tekton 11 個 task → Harbor → GitOps repo，加上變更單號閘門與人工放行，`make up` 十五分鐘起一整套。Reproducing a bank-style OpenShift delivery pipeline on CodeReady Containers.
+- [儀表板全綠，四件事還是錯的：OpenShift AI 驗收實錄](https://ryangtr.github.io/2026/08/four-green-lights-that-lie/): Open Data Hub 3.5 + KServe 全程綠燈，逐條驗證後發現四件事是錯的——其中最關鍵的是「Pod 拿到 GPU ≠ 模型算在 GPU 上」，只有 `nvidia-smi --query-compute-apps` 分得出來。Four things that were wrong despite an all-green MLOps dashboard.
+- [從零刻一個 GPT，然後把交付鏈的紀律套上去](https://ryangtr.github.io/2026/08/llm-from-scratch-book/): 8M 參數的小 GPT，重點不是模型，是把 digest／gate／lineage 這套軟體交付鏈的治理原封不動搬到模型上，以及四次「以為對、量了才知道錯」。Applying software-supply-chain discipline to an ML lifecycle.
+
+## 線上書 / Books
+
+- [從零打造並對齊一個 LLM](https://ryangtr.github.io/llm-from-scratch/): 從零手刻小型 GPT 並走完 LLM + MLOps 生命週期（資料工程 → 現代架構 → 訓練評估 → 部署治理 → 後訓練對齊 SFT/DPO/RLHF），全程可在筆電重現。
+- [供應鏈上的信任：一個銀行 IT 工程師的實作紀錄](https://ryangtr.github.io/supply-chain-trust/): 從 hash／數位簽章／MAC 等密碼學原語出發，一路搭到軟體供應鏈簽章的實作。主線：信任不是被算出來的，是被授予的；密碼學只負責把人為的信任決定保真地傳遞。撰寫中。
+
+## 程式碼 / Repositories
+
+- [ocp-pipeline-lab](https://github.com/ryanGTR/ocp-pipeline-lab): 上述 OpenShift 交付鏈 lab 的完整原始碼，含 21 個實際踩過的坑（rootless Harbor、JCasC、SCC、toolkit 的 registry 啟發式）。MIT。
+- [llm-from-scratch](https://github.com/ryanGTR/llm-from-scratch): 從零手刻 GPT 的完整專案，含 self-attention、RMSNorm/SwiGLU/RoPE/GQA、KV-cache、BPE、GRPO/PPO/DPO/IPO，全部親手實作且有對照實驗。MIT。
+- [supply-chain-trust](https://github.com/ryanGTR/supply-chain-trust): 上述書的 Quarto 原始碼與可跑範例腳本。
+
+## 其他 / Meta
+
+- [關於](https://ryangtr.github.io/about/): 作者與本站範圍說明。
+- [RSS](https://ryangtr.github.io/feed.xml)
+- [Sitemap](https://ryangtr.github.io/sitemap.xml)
