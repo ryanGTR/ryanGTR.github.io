@@ -141,3 +141,5 @@ artifacts=36  artifactsWithoutDigest=6  artifactsWithoutDepGraph=28
 *本文所有數字來自我自己建的示範專案（一個 Vue 前端 + 一條 Azure Pipelines），
 在筆電與雲端 CI 上都可重現。表一的 N 是同一個實際數字，與結論無關故略。
 工具版本以 2026 年 8 月實測為準，廠商日後修正不在本文追蹤範圍。*
+
+{% include lab-env.html %}

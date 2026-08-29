@@ -1,0 +1,39 @@
+<details class="lab-env" style="margin:2.5rem 0 1rem;padding:.9rem 1.1rem;border:1px solid #e0e0e0;border-radius:6px;background:#fafafa;font-size:.92rem;line-height:1.75;">
+<summary style="cursor:pointer;font-weight:600;">🧪 這篇的實驗環境（最後更新 2026-08-29）</summary>
+
+<p style="margin:.8rem 0 .4rem;"><strong>叢集</strong></p>
+<ul style="margin:0 0 .8rem;">
+  <li>CRC 2.63.0 · OpenShift <strong>4.22.7</strong> · Kubernetes v1.35.6</li>
+  <li>單節點：<strong>13 vCPU / 40 GiB RAM / 120 GB disk</strong>（宿主為 16 核 / 62 GB 的筆電）</li>
+  <li>⚠️ <strong>叢集內看不到 GPU</strong>（CRC 是 VM，RTX 5070 未 passthrough）</li>
+</ul>
+
+<p style="margin:.8rem 0 .4rem;"><strong>Operator</strong></p>
+<ul style="margin:0 0 .8rem;">
+  <li><code>opendatahub-operator.v3.5.0</code> ← 即 RHOAI 3.x 的上游開源版</li>
+  <li><code>cert-manager-operator.v1.20.0</code>（3.x 的必要相依；2.x 不需要）</li>
+  <li><code>openshift-pipelines-operator-rh.v1.23.2</code>、<code>openshift-gitops-operator.v1.21.3</code></li>
+</ul>
+
+<p style="margin:.8rem 0 .4rem;"><strong>DataScienceCluster 開啟的元件</strong></p>
+<ul style="margin:0 0 .8rem;">
+  <li><code>kserve</code>、<code>aipipelines</code>、<code>dashboard</code>、<code>workbenches</code>、<code>modelregistry</code>、<code>kueue</code>（Unmanaged）</li>
+  <li>其餘（<code>ray</code>／<code>trustyai</code>／<code>feast</code>／<code>aigateway</code>…）為 <code>Removed</code></li>
+</ul>
+
+<p style="margin:.8rem 0 .4rem;"><strong>叢集外的依賴</strong>（跑在宿主的 podman 上，<code>crc start</code> 不會帶起來）</p>
+<ul style="margin:0 0 .8rem;">
+  <li>Harbor v2.15.2（私有 registry）· MinIO（S3）</li>
+</ul>
+
+<p style="margin:.8rem 0 .4rem;"><strong>模型端</strong></p>
+<ul style="margin:0 0 .8rem;">
+  <li>Python 3.12.13 · PyTorch <strong>2.11.0+cu128</strong> · FastAPI + uvicorn · prometheus-client</li>
+</ul>
+
+<p style="margin:.6rem 0 0;color:#666;">
+⚠️ <strong>ODH ≠ RHOAI</strong>：元件同源，但 <strong>namespace 與部分名稱不同</strong>
+（我這裡是 <code>opendatahub</code>，商用版是 <code>redhat-ods-*</code> 那一套）。
+<strong>指令的邏輯可以照用，字串要自己對一次。</strong>
+</p>
+</details>
