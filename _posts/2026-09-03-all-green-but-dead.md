@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "平台全綠，但服務是死的"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-03 09:00:00 +0800
 tags: [openshift-ai, rhoai, kserve, troubleshooting, acceptance, monitoring]
 excerpt: "冷啟動之後，DSC 說 KserveReady=True，opendatahub 的 pod 零異常，而模型服務是死的。根因在叢集外面——而叢集的健康檢查只看得到叢集裡的東西。"

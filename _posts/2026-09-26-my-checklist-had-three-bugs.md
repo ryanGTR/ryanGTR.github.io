@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "我的驗收清單自己有三個 bug"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-26 09:00:00 +0800
 tags: [acceptance, openshift-ai, offline, methodology, verification]
 excerpt: "照文件寫了一份 42 條的驗收清單，實際跑過之後發現三條會誤導——其中一條會讓你以為裝了 80 套 operator。清單也是程式，也要測試。"

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "SBOM 有了，還是答不出「誰在用」：四個實測"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-08-27 17:00:00 +0800
 tags: [sbom, supply-chain, sca, cyclonedx, verification, acceptance]
 excerpt: "把成品 digest 綁進 SCA 平台、把依賴樹入帳、把匯出打開——每一步都成功。然後逐條去驗，四件事是錯的，其中兩件是我自己算錯的。"

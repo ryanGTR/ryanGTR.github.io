@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "ODH Dashboard 實際長怎樣：一個 project 從頭走到尾"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-18 09:00:00 +0800
 tags: [openshift-ai, odh, dashboard, dspa, pipelines, tutorial, screenshots]
 excerpt: "前幾篇都在講 YAML 和指令。這篇改用畫面走一次：project 怎麼建、pipeline 上傳在哪、run 從哪裡看、產出物在哪一頁——以及每一頁上哪個欄位是真的要看的。"

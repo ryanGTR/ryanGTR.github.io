@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Workbench 被 webhook 擋住了——四個指令查到根因，以及一個我答不出來的問題"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-14 09:00:00 +0800
 tags: [openshift-ai, odh, workbench, jupyter, webhook, troubleshooting]
 excerpt: "兩個 admission webhook 擋住 Notebook 建立。這篇是查根因的過程、一個撐得過重啟的修法、以及一個我查不出答案的矛盾——同一個叢集上有一個五天前建的 Notebook 好好地跑著。"

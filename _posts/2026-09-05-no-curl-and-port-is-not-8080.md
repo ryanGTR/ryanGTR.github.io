@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "容器裡沒有 curl，而且 port 不是 8080"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-05 09:00:00 +0800
 tags: [kserve, openshift-ai, troubleshooting, debugging]
 excerpt: "兩個會讓你在 KServe 上浪費半小時的小事。都不難，但都不會寫在教學裡。"

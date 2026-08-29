@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "我的漂移監控說「該重訓了」。它是錯的。"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-08-30 09:00:00 +0800
 tags: [mlops, llm, drift, monitoring, psi, retraining, openshift-ai]
 excerpt: "服務上線後什麼時候該重訓 LLM？我的監控回 retrain_suggested: true。查下去發現：它在零漂移的情況下也會這樣說，因為樣本太小。這篇是那個 bug 的解剖，以及一組不會騙你的觸發訊號。"

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "InferenceService 到底幫你生了什麼"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-08 09:00:00 +0800
 tags: [kserve, openshift-ai, rhoai, inferenceservice, tutorial]
 excerpt: "41 行 YAML，換來一個 Deployment、一個 Service、一個自動塞進去的 init container，和三個容器。這篇把它拆開看，並說明哪一樣它不會幫你生。"

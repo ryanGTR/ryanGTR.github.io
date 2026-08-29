@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "pod 要到卡 ≠ 模型算在卡上"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-16 09:00:00 +0800
 tags: [openshift-ai, gpu, hardware-profile, acceptance, kserve, verification]
 excerpt: "GPU 被 pod 佔住、但模型其實跑在 CPU 上——這是最貴的一種失敗，而且所有你會看到的畫面都是綠的。這篇是分辨它的唯一乾淨訊號，以及 3.x 的 Hardware Profile 怎麼設。"

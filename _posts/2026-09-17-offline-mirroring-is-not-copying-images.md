@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "離線鏡像：operator 宣告 2 顆，實際跑起來要 76 顆"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-17 09:00:00 +0800
 tags: [openshift-ai, odh, offline, disconnected, oc-mirror, idms, acceptance]
 excerpt: "在內網裝 OpenShift AI，最大的坑不是「怎麼鏡像」，是「鏡哪些」。operator bundle 給你的清單，跟實際要跑的差了一個數量級。"

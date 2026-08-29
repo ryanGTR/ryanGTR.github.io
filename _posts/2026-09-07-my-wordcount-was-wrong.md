@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "我用錯的量法，差點讓我把工作量翻倍"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-07 09:00:00 +0800
 tags: [methodology, metrics, measurement, writing]
 excerpt: "一個自訂的字數上限，一批「全部超標」的稿子，一個差點做出的錯誤決定。問題不在稿子，在量法。"

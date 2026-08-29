@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "RBAC 缺權限不會回 Forbidden，它會讓 controller 逾時自殺"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-10 09:00:00 +0800
 tags: [openshift-ai, kserve, rbac, troubleshooting, kubernetes]
 excerpt: "兩個 controller 冷啟動後 CrashLoopBackOff，log 停在一行 cache sync 逾時。看起來像網路慢，實際上是權限。這個錯誤訊息我在網路上一筆都搜不到。"

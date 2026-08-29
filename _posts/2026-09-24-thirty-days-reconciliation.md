@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "三十天對帳：我量錯的四次"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-24 09:00:00 +0800
 tags: [methodology, mlops, openshift-ai, retrospective, verification]
 excerpt: "這個系列每一篇都在講「別人的檢查沒在檢查」。這篇算我自己的帳：三十天裡我量錯四次，其中兩次差點寫進要交出去的文件。"

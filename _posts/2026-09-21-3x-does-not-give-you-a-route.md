@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "3.x 不會幫你開對外入口：「上線了」和「打得到」是兩件事"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-21 09:00:00 +0800
 tags: [openshift-ai, kserve, route, networking, acceptance]
 excerpt: "ISvc 顯示 READY=True，你拿到的網址卻是 .svc.cluster.local。這是 2.x 換到 3.x 之後最容易忽略的一個差別，而它會在驗收當天才爆出來。"

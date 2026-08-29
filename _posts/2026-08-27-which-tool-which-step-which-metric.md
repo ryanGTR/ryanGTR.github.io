@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "哪一步、用什麼工具、看什麼指標"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-08-27 14:00:00 +0800
 tags: [openshift-ai, rhoai, mlops, metrics, acceptance, tutorial]
 excerpt: "七個流程步驟，各對應哪個工具，以及那一步的關鍵指標——而指標分成「跑完了」和「做對了」兩欄，因為它們是完全不同的兩件事。附官方教學用幾個工具的對照。"

@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "私有 registry：為什麼 image 跟模型要分開放"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-22 09:00:00 +0800
 tags: [harbor, registry, openshift-ai, supply-chain, offline, tutorial]
 excerpt: "同一份東西，image 進 registry、模型進 S3。這個分法不是潔癖，是因為兩者的生命週期完全不同——以及它怎麼決定你的放行流程長什麼樣。"

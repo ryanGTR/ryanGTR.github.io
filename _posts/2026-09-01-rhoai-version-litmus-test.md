@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "一張版本試紙：怎麼三分鐘看出對方手上的文件是 2.x 的"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-01 09:00:00 +0800
 tags: [openshift-ai, rhoai, odh, kserve, acceptance, version-migration]
 excerpt: "五個 oc 指令，每個都會直接告訴你這套 OpenShift AI 是 2.x 還是 3.x。附一個我今天才發現的坑：你寫 RawDeployment，叢集會靜默改寫成 Standard。"

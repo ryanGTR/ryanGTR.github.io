@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "OpenShift AI 3.x：為什麼你搜到的教學會壞給你看"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-08-29 09:00:00 +0800
 tags: [openshift-ai, rhoai, odh, kserve, mlops, version-migration]
 excerpt: "2.x 是把 AI 平台架在 Service Mesh / Serverless 上，3.x 把那層整個拆掉。網路上的教學絕大多數是 2.x 的，照做會缺 operator、模型上線模式不同、GPU 設定物件換了名字——而且 2.25 不能升級到 3.x。這篇列出實測到的差異與一組可以當場用的檢查。"

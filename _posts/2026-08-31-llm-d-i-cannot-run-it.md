@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "llm-d 我跑不起來——但我可以告訴你它需要什麼"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-08-31 09:00:00 +0800
 tags: [llm-d, openshift-ai, rhoai, kserve, inference, acceptance]
 excerpt: "CRD 全都在，但三個前置一個都不滿足。這篇不是教學，是一份「你評估 llm-d 時該問廠商什麼」的清單——而叢集自己就會把缺什麼講出來。"

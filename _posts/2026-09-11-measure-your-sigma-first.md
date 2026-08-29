@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "你的門檻憑什麼是 0.05：先去量你的 σ"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-11 09:00:00 +0800
 tags: [mlops, governance, promotion-gate, metrics, statistics, spc]
 excerpt: "我的 promotion gate 用 tol=0.05 判斷模型有沒有退步。那個數字是我填的，沒有依據。這篇是把它量出來的過程，以及為什麼你該借的是管制圖而不是 p 值。"

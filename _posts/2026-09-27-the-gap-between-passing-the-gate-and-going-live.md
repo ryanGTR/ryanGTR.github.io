@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "從 gate 放行到真的上線，中間那一步是空的"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-27 09:00:00 +0800
 tags: [mlops, governance, promotion-gate, kserve, openshift-ai, deployment]
 excerpt: "我的 pipeline 有完整的四棒、有 gate、有台帳。gate 也真的放行了一顆模型。然後我去查線上跑的是哪一顆——是四天前的另一顆，而且跟這條 pipeline 完全無關。"

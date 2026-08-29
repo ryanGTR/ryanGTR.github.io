@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "三顆一樣的模型，一顆上線兩顆被擋"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-02 09:00:00 +0800
 tags: [mlops, governance, promotion-gate, openshift-ai, kubeflow-pipelines, acceptance]
 excerpt: "同一條 pipeline、同一份資料、同樣的步數，三次訓練出來的模型能力幾乎相同：7.2343 / 7.2370 / 7.2428。一顆上線，兩顆被 gate 擋下。決定它們命運的不是模型。"

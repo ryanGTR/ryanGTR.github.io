@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "在 OpenShift AI 上搭一條四棒的模型交付鏈"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-09 09:00:00 +0800
 tags: [kubeflow-pipelines, openshift-ai, rhoai, dspa, mlops, tutorial]
 excerpt: "prepare → train → evaluate → gate。用 Python 寫、編成 YAML、丟上平台跑。這篇是最小可用版本，以及三個當初卡住我的設定。"

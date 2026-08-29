@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "線上的 LLM 要監控什麼、怎麼評估"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-19 09:00:00 +0800
 tags: [mlops, llm, monitoring, prometheus, grafana, evaluation, openshift-ai]
 excerpt: "一般服務壞掉會回 500，LLM 壞掉會回一個看起來正常的答案。所以只盯錯誤率和延遲等於沒監控。這篇是四層指標、埋法、以及「監控」和「評估」為什麼是兩件事。"

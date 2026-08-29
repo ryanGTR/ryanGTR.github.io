@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "假綠的五種形態"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-23 09:00:00 +0800
 tags: [mlops, openshift-ai, verification, acceptance, false-green, methodology]
 excerpt: "這三十天我在同一套平台上撞到五種「顯示正常但實際壞掉」。它們的共同點不是 bug，是檢查本身的設計缺陷——而且每一種都有一句話可以戳破。"

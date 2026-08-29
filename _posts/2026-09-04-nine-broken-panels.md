@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "監控上線了，九個面板全是壞的"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-04 09:00:00 +0800
 tags: [grafana, prometheus, monitoring, openshift-ai, mlops, false-green]
 excerpt: "Grafana pod Running、Prometheus target up、dashboard 開得起來——而九個面板一個資料都查不到。根因是一個沒填的欄位。"

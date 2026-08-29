@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "這一堆工具各是誰：OpenShift AI 的角色分工表"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-08-27 09:00:00 +0800
 tags: [openshift-ai, rhoai, odh, mlops, kserve, kubeflow-pipelines, tutorial]
 excerpt: "KServe、DSPA、storage-initializer、MinIO、Harbor、Prometheus、cert-manager⋯⋯第一次看到會矇。這篇把每個角色用一句話定位、對應到流程哪一步、以及那一步該看什麼指標——並區分「跑完了」和「做對了」。"

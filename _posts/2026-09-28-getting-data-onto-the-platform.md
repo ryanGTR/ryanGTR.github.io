@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "怎麼把資料放上平台——以及放上去之後你答不答得出它哪來的"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-28 09:00:00 +0800
 tags: [openshift-ai, mlops, data, s3, lineage, governance, dataset-card]
 excerpt: "四種把資料弄上平台的方式，各自的代價。但真正的問題不是「怎麼放」——是我查了自己平台上那份 99 MB 的語料，除了檔名、日期、大小之外，什麼都查不到。"

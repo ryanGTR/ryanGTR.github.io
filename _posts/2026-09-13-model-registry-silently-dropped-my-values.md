@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Model Registry：登記成功，但每一個值都是 0"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-13 09:00:00 +0800
 tags: [openshift-ai, rhoai, model-registry, governance, api, tutorial]
 excerpt: "OpenShift AI 的模型台帳。這篇從開元件、備 DB、建實例到用 API 登記一顆模型全走一次——最後在 API 上踩到一個會讓你的治理數據全部歸零、而且不會報錯的坑。"

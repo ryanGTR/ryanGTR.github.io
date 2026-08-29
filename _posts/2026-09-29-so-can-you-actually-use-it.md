@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "所以這個平台到底能不能用"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-29 09:00:00 +0800
 tags: [openshift-ai, rhoai, odh, mlops, assessment, acceptance, verdict]
 excerpt: "三十天、八個功能、十七道關卡。這篇是總評——不是「好不好」，是一個評估者真正需要的數字：從「官方說有」到「我手上能用」，中間要跨幾關，以及那些關卡誰來跨。"

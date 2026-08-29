@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Kueue：CRD 說可以，webhook 說不行"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-20 09:00:00 +0800
 tags: [openshift-ai, odh, kueue, crd, webhook, troubleshooting]
 excerpt: "把 kueue 設成 Managed 被拒絕，但 CRD 的 enum 裡明明還列著 Managed。這篇是兩層驗證不一致的實例，以及它對「照文件做」的意義。"

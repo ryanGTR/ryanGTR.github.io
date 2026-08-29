@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "棘輪失效：每一步都合法，二十步之後系統爛掉"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-25 09:00:00 +0800
 tags: [mlops, governance, promotion-gate, methodology, technical-debt]
 excerpt: "我的 gate 規則是「不能比現行版差超過 tol」。這條規則有一個結構性缺陷：每次退一點點都合法，二十次之後累積退步 0.84——而每一步都通過了檢查。"

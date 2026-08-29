@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "全景圖：從一台筆電到一個被治理的模型服務"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-08-28 09:00:00 +0800
 tags: [openshift-ai, rhoai, odh, mlops, governance, roadmap]
 excerpt: "官網文件是按元件分章的——裝什麼、怎麼用某個功能。缺的是「一條完整的路走一次」。這篇是那張圖，標出官網講到哪、我補在哪，以及一個官網目前還在教 2.x 做法的實例。"

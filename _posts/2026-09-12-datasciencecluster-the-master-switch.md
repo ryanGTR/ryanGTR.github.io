@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "DataScienceCluster：整套平台的總開關"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-12 09:00:00 +0800
 tags: [openshift-ai, rhoai, odh, datasciencecluster, operator, tutorial]
 excerpt: "一個 CR 決定你的叢集上有哪些 AI 元件。這篇講它是什麼、什麼時候你會動到它、怎麼改，以及為什麼「先全開再說」是最貴的選擇。"

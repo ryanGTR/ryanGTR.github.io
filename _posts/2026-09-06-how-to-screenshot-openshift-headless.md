@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "怎麼自動截 OpenShift console 和 Grafana 的圖"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-06 09:00:00 +0800
 tags: [openshift, grafana, automation, chrome-devtools, oauth, documentation]
 excerpt: "寫平台文件要大量截圖，手動截會過期。用 Chrome DevTools Protocol + OAuth cookie 全自動化，四個坑一次講完。"

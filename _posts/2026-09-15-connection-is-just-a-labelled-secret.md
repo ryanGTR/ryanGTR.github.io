@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Connection 其實是一個貼了 label 的 Secret"
+series: "OpenShift AI 實戰紀錄"
 date: 2026-09-15 09:00:00 +0800
 tags: [openshift-ai, odh, s3, connection, minio, tutorial]
 excerpt: "OpenShift AI 的「Connection」不是 CRD。這篇講它到底是什麼、怎麼建，以及為什麼你的 pipeline 明明在用 S3，dashboard 上卻顯示「沒有 connection」。"
