@@ -24,3 +24,13 @@ exclude:
   - README.md
 future: true
 timezone: Asia/Taipei
+
+# 留言：giscus（GitHub Discussions）
+# 目的＝拿到讀者的真實回饋，不是衝互動數。每篇 front matter 可加 feedback_question，
+# 會顯示在留言框上方——問一個對方一看就知道自己有答案的具體問題。
+giscus:
+  repo: "ryanGTR/ryanGTR.github.io"
+  repo_id: "R_kgDOT_bAIg"
+  category: "Announcements"
+  category_id: "DIC_kwDOT_bAIs4DEax1"
+  heading: "留言與指正"

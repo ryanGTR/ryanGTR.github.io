@@ -1,0 +1,25 @@
+{%- if site.giscus.repo -%}
+<section class="post-comments" style="margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e8e8e8;">
+  <h2 style="font-size:1.25rem;margin-bottom:.5rem;">{{ site.giscus.heading | default: "留言" }}</h2>
+  {%- if page.feedback_question -%}
+  <p style="margin-bottom:1rem;color:#555;"><strong>我特別想知道：</strong>{{ page.feedback_question }}</p>
+  {%- endif -%}
+  <script src="https://giscus.app/client.js"
+          data-repo="{{ site.giscus.repo }}"
+          data-repo-id="{{ site.giscus.repo_id }}"
+          data-category="{{ site.giscus.category }}"
+          data-category-id="{{ site.giscus.category_id }}"
+          data-mapping="pathname"
+          data-strict="1"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="top"
+          data-theme="preferred_color_scheme"
+          data-lang="zh-TW"
+          data-loading="lazy"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <noscript>請開啟 JavaScript 以載入留言區，或直接到 <a href="https://github.com/{{ site.giscus.repo }}/discussions">GitHub Discussions</a> 留言。</noscript>
+</section>
+{%- endif -%}
