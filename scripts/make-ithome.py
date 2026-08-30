@@ -53,6 +53,12 @@ def convert(md: pathlib.Path) -> tuple[int, str, str]:
     q = re.search(r'^feedback_question: "(.*)"$', fm, re.M)
     question = q.group(1) if q else ""
 
+    # 正文結尾「---／**提問**／lab-env」這三段裡的提問與頁尾重複，去掉正文那份
+    if question:
+        body = re.sub(
+            r"\n+---\n+\*\*" + re.escape(question) + r"\*\*\n+(?=\{%\s*include lab-env)",
+            "\n\n", body)
+
     # 相對連結 → 絕對網址（Liquid 形式）
     body = re.sub(r"\{\{\s*'([^']+)'\s*\|\s*relative_url\s*\}\}", SITE + r"\1", body)
     body = re.sub(r"\{%\s*include lab-env\.html\s*%\}", LAB_ENV, body)
@@ -61,7 +67,10 @@ def convert(md: pathlib.Path) -> tuple[int, str, str]:
     # 純 markdown 的相對連結（](/2026/... 、](/assets/...）
     body = re.sub(r"\]\((/(?:2026|assets)/[^)]*)\)", lambda m: f"]({SITE}{m.group(1)})", body)
 
-    # 最後一行的提問已在正文，避免重複出現在頁尾
+    # 正文結尾那句提問與頁尾重複，去掉正文那一份（連同它前面的分隔線）
+    body = body.rstrip()
+    if question:
+        body = re.sub(r"\n+(---\n+)?\*\*" + re.escape(question) + r"\*\*\s*$", "", body)
     body = body.rstrip()
 
     head = f"# {title}\n\n> 這是《{SERIES}》系列的第 {day} 篇。\n"
