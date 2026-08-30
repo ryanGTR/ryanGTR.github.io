@@ -14,8 +14,11 @@ iThome 不吃 Jekyll 的 Liquid，而且相對連結貼過去會壞掉。這支�
 import re, sys, pathlib
 
 ROOT   = pathlib.Path(__file__).resolve().parent.parent
-POSTS  = ROOT / "_posts"
-OUT    = ROOT / "ithome"
+# 🔴 B 線稿件不放在部落格 repo 裡——那個 repo 是 public，
+#    published: false 只擋網頁，擋不住 GitHub 上的原始碼。
+DRAFTS = pathlib.Path.home() / "Documents" / "ironman-drafts"
+POSTS  = DRAFTS / "_posts"
+OUT    = DRAFTS / "ithome"
 SITE   = "https://ryanGTR.github.io"
 REPO   = "https://github.com/ryanGTR/openshift-ai-30days"
 MODEL  = "https://github.com/ryanGTR/llm-from-scratch"
