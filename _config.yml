@@ -22,6 +22,8 @@ plugins:
   - jekyll-sitemap
 exclude:
   - README.md
+  - scripts
+  - ithome
 future: true
 timezone: Asia/Taipei
 
