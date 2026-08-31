@@ -17,7 +17,7 @@ command -v wl-copy >/dev/null || { echo "❌ 沒有 wl-copy（pacman -S wl-clipb
 # 先同步，避免貼到舊版
 python3 scripts/make-ithome.py >/dev/null
 
-src=$(ls "$DRAFTS"/ithome/day${day}-*.md 2>/dev/null | head -1)
+src=$(ls "$DRAFTS"/ithome/day${day}-*.md 2>/dev/null | head -1) || true
 [ -n "$src" ] || { echo "❌ 找不到 Day $1（$DRAFTS/ithome/day${day}-*.md）"; exit 1; }
 
 wl-copy < "$src"
