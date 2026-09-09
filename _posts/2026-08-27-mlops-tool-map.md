@@ -23,33 +23,7 @@ feedback_question: "你們現在這條線上，哪個角色是缺的？（沒有
 
 ## 一張圖：誰跟誰講話
 
-```
-     ┌─────────── 底座 ───────────┐
-     │  OpenShift (k8s)           │
-     │  ODH / RHOAI operator      │  ← 管理下面所有元件的開關
-     │  cert-manager              │  ← 3.x 的必要相依
-     └────────────┬───────────────┘
-                  │
-   ┌──────────────┼──────────────────┐
-   │              │                  │
-┌──▼───┐   ┌──────▼──────┐   ┌───────▼────────┐
-│ 倉庫 │   │  生產模型   │   │   服務模型     │
-│      │   │             │   │                │
-│MinIO │◄──┤ Pipelines   ├──►│ KServe         │
-│(S3)  │   │ (DSPA)      │   │ InferenceService│
-│      │   │             │   │  └ storage-init│
-│Harbor│───┼─────────────┼──►│    (去 S3 拿權重)│
-│(image)│  │             │   │                │
-└──────┘   └─────────────┘   └───────┬────────┘
-                                     │
-                        ┌────────────┴──────────┐
-                        │                       │
-                  ┌─────▼─────┐        ┌────────▼────────┐
-                  │  看它     │        │   記它          │
-                  │Prometheus │        │ 台帳 / lineage  │
-                  │Grafana    │        │ Model Registry  │
-                  └───────────┘        └─────────────────┘
-```
+![OpenShift AI 角色分工圖：底座（OpenShift／ODH operator／cert-manager）之下，生產模型（Pipelines）寫入倉庫（MinIO、Harbor，叢集外），服務模型（KServe）從倉庫抓權重與 image，再分出看它（Prometheus／Grafana）與記它（台帳／lineage／gate）](/assets/img/rhoai/mlops-roles.png)
 
 ---
 

@@ -20,7 +20,7 @@ python3 scripts/make-ithome.py >/dev/null
 src=$(ls "$DRAFTS"/ithome/day${day}-*.md 2>/dev/null | head -1) || true
 [ -n "$src" ] || { echo "❌ 找不到 Day $1（$DRAFTS/ithome/day${day}-*.md）"; exit 1; }
 
-wl-copy < "$src"
+setsid -f wl-copy < "$src"   # detach，避免呼叫端（如 Claude）結束時連帶被殺
 n=$(wl-paste | wc -c)
 title=$(head -1 "$src" | sed 's/^# //')
 

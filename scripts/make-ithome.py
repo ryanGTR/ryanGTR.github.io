@@ -51,7 +51,8 @@ def convert(md: pathlib.Path) -> tuple[int, str, str]:
     title = re.search(r'^title: "(.*)"$', fm, re.M).group(1)
     day   = int(re.search(r"Day (\d+)", title).group(1))
     slug  = md.stem[11:]
-    url   = f"{SITE}/2026/09/{slug}/"
+    # 年月取自檔名日期，不能寫死——連載跨月時（Day 31 在 10/01）寫死會產出 404 連結
+    url   = f"{SITE}/{md.stem[:4]}/{md.stem[5:7]}/{slug}/"
 
     q = re.search(r'^feedback_question: "(.*)"$', fm, re.M)
     question = q.group(1) if q else ""
