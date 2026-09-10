@@ -24,11 +24,11 @@ REPO   = "https://github.com/ryanGTR/openshift-ai-30days"
 MODEL  = "https://github.com/ryanGTR/llm-from-scratch"
 SERIES = "OpenShift AI 入門 30 天"
 
-LAB_ENV = f"""---
+LAB_ENV_HEAD = """---
 
 <details>
 <summary>🧪 這篇的實驗環境</summary>
-
+{NOTE}
 - **叢集**：CRC 2.63.0 · OpenShift 4.22.7 · Kubernetes v1.35.6
   單節點 13 vCPU / 40 GiB / 120 GB，**叢集內沒有 GPU**
 - **Operator**：`opendatahub-operator.v3.5.0`（即 RHOAI 3.x 的上游開源版）、
@@ -44,6 +44,15 @@ LAB_ENV = f"""---
 """
 
 
+def lab_env(note: str) -> str:
+    """單篇的環境註記（front matter 的 lab_env_note）插在區塊最前面。
+
+    共用區塊寫的是「這台叢集長期以來的樣子」，但它會被自動升版；
+    某一篇是在哪個版本上驗的，只有那一篇自己知道——所以放 front matter。
+    """
+    return LAB_ENV_HEAD.replace("{NOTE}", f"\n{note}\n" if note else "")
+
+
 def convert(md: pathlib.Path) -> tuple[int, str, str]:
     raw = md.read_text()
     fm, body = raw.split("---", 2)[1], raw.split("---", 2)[2]
@@ -57,6 +66,9 @@ def convert(md: pathlib.Path) -> tuple[int, str, str]:
     q = re.search(r'^feedback_question: "(.*)"$', fm, re.M)
     question = q.group(1) if q else ""
 
+    n = re.search(r'^lab_env_note: "(.*)"$', fm, re.M)
+    env_note = n.group(1) if n else ""
+
     # 正文結尾「---／**提問**／lab-env」這三段裡的提問與頁尾重複，去掉正文那份
     if question:
         body = re.sub(
@@ -65,7 +77,8 @@ def convert(md: pathlib.Path) -> tuple[int, str, str]:
 
     # 相對連結 → 絕對網址（Liquid 形式）
     body = re.sub(r"\{\{\s*'([^']+)'\s*\|\s*relative_url\s*\}\}", SITE + r"\1", body)
-    body = re.sub(r"\{%\s*include lab-env\.html\s*%\}", LAB_ENV, body)
+    # 用 lambda：註記裡的 \1 之類字元不能被當成 re 的置換語法
+    body = re.sub(r"\{%\s*include lab-env\.html\s*%\}", lambda _: lab_env(env_note), body)
     # {% raw %} 只是給 Jekyll 看的，iThome 不需要
     body = re.sub(r"\{%\s*(end)?raw\s*%\}\n?", "", body)
     # 純 markdown 的相對連結（](/2026/... 、](/assets/...）

@@ -1,6 +1,12 @@
 <details class="lab-env" style="margin:2.5rem 0 1rem;padding:.9rem 1.1rem;border:1px solid #e0e0e0;border-radius:6px;background:#fafafa;font-size:.92rem;line-height:1.75;">
 <summary style="cursor:pointer;font-weight:600;">🧪 這篇的實驗環境與 lab 檔案（最後更新 2026-08-30）</summary>
 
+{%- if page.lab_env_note %}
+<p style="margin:.8rem 0 .2rem;padding:.5rem .7rem;border-left:3px solid #d0a000;background:#fffbe8;">
+{{ page.lab_env_note | markdownify | remove: "<p>" | remove: "</p>" }}
+</p>
+{%- endif %}
+
 <p style="margin:.8rem 0 .4rem;"><strong>叢集</strong></p>
 <ul style="margin:0 0 .8rem;">
   <li>CRC 2.63.0 · OpenShift <strong>4.22.7</strong> · Kubernetes v1.35.6</li>
