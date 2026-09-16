@@ -6,6 +6,7 @@ date: 2026-09-08 09:00:00 +0800
 tags: [openshift-ai, odh, workbench, jupyter, notebook, tutorial]
 excerpt: "Workbench 就是跑在叢集上的 JupyterLab。這篇講它跟你筆電上的 notebook 差在哪、怎麼開一個、資料和 GPU 怎麼接進去。"
 feedback_question: "你們資料科學家現在在哪裡寫 code？自己筆電、共用機器，還是平台上？"
+lab_env_note: "⚠️ 本文寫作時是 **3.5.0**；發文前我在已升級的 `3.6.0-ea.1` 上重跑，上面標了 ⚠️ 的幾處就是兩版不一樣的地方。升版經過寫在 Day 5 的補記。"
 ---
 
 ## 這是什麼、解決什麼問題

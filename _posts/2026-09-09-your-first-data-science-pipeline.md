@@ -6,6 +6,7 @@ date: 2026-09-09 09:00:00 +0800
 tags: [openshift-ai, odh, kubeflow, pipelines, dspa, kfp, tutorial]
 excerpt: "notebook 跑得動不代表下個月還跑得動。這篇講 DSPA 是什麼、怎麼開起來、怎麼把一段 Python 變成一條會留下紀錄的 pipeline。"
 feedback_question: "你們的訓練流程現在是 notebook、shell script，還是已經進 pipeline 了？"
+lab_env_note: "⚠️ 本文寫作時是 **3.5.0**；發文前我在升級後的 `3.6.0-ea.1` 上把整條 pipeline 從編譯到跑完重做了一次（`kfp` 2.17.0），結果如文中所示。升版經過寫在 Day 5 的補記。"
 ---
 
 ## 這是什麼、解決什麼問題

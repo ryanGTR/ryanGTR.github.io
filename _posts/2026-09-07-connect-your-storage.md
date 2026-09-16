@@ -6,6 +6,7 @@ date: 2026-09-07 09:00:00 +0800
 tags: [openshift-ai, odh, s3, connection, minio, tutorial]
 excerpt: "workbench 要讀訓練資料、pipeline 要存產物、模型服務要抓權重——都靠這一份設定。這篇是怎麼建、怎麼給不同的東西用、以及怎麼確認它真的能用。"
 feedback_question: "你們的訓練資料和模型放哪？S3、PVC，還是 NFS？"
+lab_env_note: "⚠️ 本文寫作時是 **3.5.0**；這台後來被自動升到 `3.6.0-ea.1`，本篇指令我在 3.6 上重跑過都一樣。升版的事寫在 Day 5 的補記。"
 ---
 
 ## 這是什麼、解決什麼問題

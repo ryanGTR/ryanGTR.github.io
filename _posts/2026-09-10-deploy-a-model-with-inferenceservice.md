@@ -104,8 +104,23 @@ spec:
       storageUri: s3://models/my-model/
 ```
 
-沒指定 runtime 也行——KServe 會照 `modelFormat` 去找
-`autoSelect: true` 的 runtime 自動配。
+⚠️ **但 runtime 不會自己出現。** 直覺會以為不寫 `runtime:`，KServe 就會照
+`modelFormat` 去找標了 `autoSelect: true` 的 runtime 自動配——**在剛裝好的 ODH 上不會。**
+
+KServe 配對只掃 `ServingRuntime` 與 `ClusterServingRuntime`，
+而 ODH 內建的十四個全是 `Template`，兩種都不是：
+
+```bash
+$ oc get clusterservingruntimes
+No resources found
+
+$ oc get servingruntimes -A
+llm-serve-demo   mlserver-runtime     ← 只有這一個，是 dashboard 部署模型時生的
+```
+
+不寫 runtime 送出去，拿到的是 `no runtime found to support predictor`，
+**沒有 pod、沒有 Deployment**。所以這裡要明寫 `runtime:`，
+而那個 runtime 得先從 template 實例化出來——怎麼做、為什麼是這樣，Day 11 整篇在講。
 
 ### 路線 B：自帶容器
 

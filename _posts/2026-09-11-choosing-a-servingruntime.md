@@ -133,7 +133,8 @@ onnx 1
 一次掃全部：
 
 ```bash
-for t in $(oc get templates -n opendatahub -o name | grep runtime-template); do
+for t in $(oc get templates -n opendatahub -o json \
+  | jq -r '.items[] | select(.objects[0].kind=="ServingRuntime") | "template/" + .metadata.name'); do
   echo "== $t"
   oc get $t -n opendatahub -o json \
     | jq -r '.objects[0].spec.supportedModelFormats[]?.name' | sort -u | tr '\n' ' '

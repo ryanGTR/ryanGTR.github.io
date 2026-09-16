@@ -6,6 +6,7 @@ date: 2026-09-05 09:00:00 +0800
 tags: [openshift-ai, odh, datasciencecluster, dsc, tutorial]
 excerpt: "裝完 operator 之後，平台上什麼都沒有。要有東西，得先建 DataScienceCluster。這篇講它管什麼、怎麼開關元件、怎麼讀它的狀態。"
 feedback_question: "你們評估 AI 平台時，是先列清單再挑元件，還是先全開再砍？"
+lab_env_note: "⚠️ 本文的元件清單與狀態是在 **3.5.0** 上實測的；發文前重跑時這台已被自動升到 `3.6.0-ea.1`，差異見文末補記。"
 ---
 
 ## 這是什麼、解決什麼問題

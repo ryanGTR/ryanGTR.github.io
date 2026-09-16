@@ -6,6 +6,7 @@ date: 2026-09-06 09:00:00 +0800
 tags: [openshift-ai, odh, dashboard, tutorial, ironman2026]
 excerpt: "你的資料科學家不會用 oc，他們會打開那個網頁。這篇把 dashboard 每一頁走一次，標出哪一欄是真的要看的。"
 feedback_question: "你們的人比較常用 dashboard 還是 oc？卡在哪一頁最多？"
+lab_env_note: "⚠️ 本文截圖與畫面結構是在 **3.5.0** 上拍的；這台叢集後來被自動升到 `3.6.0-ea.1`，升版怎麼發生的、我怎麼處理，寫在 Day 5 的補記。"
 ---
 
 ## 這是什麼、解決什麼問題
