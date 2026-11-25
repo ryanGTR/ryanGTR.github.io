@@ -1,0 +1,722 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>刪中間節點：對撞法</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<style>
+/* Layout: a lab bench. Diagram on top, narration + controls under it, code and a variable watch beside (stacked on phones). */
+:root {
+	--bg: #edf0f3;
+	--surface: #ffffff;
+	--surface-2: #f4f6f8;
+	--line: #d3d9e0;
+	--ink: #18212b;
+	--muted: #5b6878;
+	--front: #0e7f73;
+	--front-soft: #d6efeb;
+	--back: #b1531b;
+	--back-soft: #f7e3d5;
+	--danger: #b42318;
+	--code-bg: #18212b;
+	--code-fg: #dbe3ec;
+	--code-dim: #7d8a99;
+	--code-kw: #7fd1c5;
+	--code-hl: rgba(14, 127, 115, .32);
+	--font-head: "IBM Plex Sans", "Noto Sans TC", system-ui, sans-serif;
+	--font-body: "Noto Sans TC", "IBM Plex Sans", system-ui, sans-serif;
+	--font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		--bg: #0f141a; --surface: #161d25; --surface-2: #1d2631; --line: #2b3643;
+		--ink: #e3e9ef; --muted: #93a1b0;
+		--front: #3cc4b3; --front-soft: #123832; --back: #f08a4b; --back-soft: #3a2416;
+		--danger: #f2685c; --code-bg: #0a0f14; --code-fg: #dbe3ec; --code-dim: #6b7787;
+		--code-kw: #7fd1c5; --code-hl: rgba(60, 196, 179, .22);
+		color-scheme: dark;
+	}
+}
+:root[data-theme="dark"] {
+	--bg: #0f141a; --surface: #161d25; --surface-2: #1d2631; --line: #2b3643;
+	--ink: #e3e9ef; --muted: #93a1b0;
+	--front: #3cc4b3; --front-soft: #123832; --back: #f08a4b; --back-soft: #3a2416;
+	--danger: #f2685c; --code-bg: #0a0f14; --code-fg: #dbe3ec; --code-dim: #6b7787;
+	--code-kw: #7fd1c5; --code-hl: rgba(60, 196, 179, .22);
+	color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+	margin: 0;
+	background: var(--bg); color: var(--ink);
+	font-family: var(--font-body); font-size: 16px; line-height: 1.7;
+}
+.wrap {
+	max-width: 1120px; margin: 0 auto;
+	padding-block: 24px 48px;
+	padding-left: max(16px, env(safe-area-inset-left, 0px));
+	padding-right: max(16px, env(safe-area-inset-right, 0px));
+	display: grid; gap: 20px;
+}
+header { display: grid; gap: 4px; }
+.eyebrow {
+	font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em;
+	text-transform: uppercase; color: var(--muted);
+}
+h1 {
+	font-family: var(--font-head); font-size: clamp(24px, 4vw, 32px);
+	line-height: 1.25; margin: 0; text-wrap: balance;
+}
+.lede { margin: 0; color: var(--muted); max-width: 62ch; }
+
+.bench { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+@media (max-width: 860px) { .bench { grid-template-columns: minmax(0, 1fr); } }
+.col { display: grid; gap: 16px; min-width: 0; }
+
+.card {
+	background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+}
+.stage { padding: 8px; overflow-x: auto; }
+.stage svg { display: block; width: 100%; min-width: 520px; height: auto; }
+
+.narr { padding: 20px 22px; display: grid; gap: 12px; }
+.narr-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.narr h2 { font-family: var(--font-head); font-size: 20px; margin: 0; line-height: 1.35; }
+.count { font-family: var(--font-mono); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.body { margin: 0; max-width: 62ch; }
+.body p { margin: 0 0 8px; }
+.body p:last-child { margin-bottom: 0; }
+code, .m { font-family: var(--font-mono); font-size: .92em; }
+.body code { background: var(--surface-2); border: 1px solid var(--line); border-radius: 5px; padding: 0 5px; }
+.f { color: var(--front); font-weight: 700; }
+.b { color: var(--back); font-weight: 700; }
+.body table { border-collapse: collapse; margin-top: 6px; font-size: 14px; width: 100%; }
+.body th, .body td { border-bottom: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+.body th { color: var(--muted); font-weight: 500; }
+.tablewrap { overflow-x: auto; }
+
+.guess { display: grid; gap: 8px; padding: 12px 14px; border-radius: 10px; background: var(--surface-2); border: 1px dashed var(--line); }
+.guess-q { font-weight: 500; }
+.guess-opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.guess-opts button {
+	font: inherit; font-family: var(--font-mono); font-size: 14px;
+	padding: 6px 12px; border-radius: 8px; border: 1px solid var(--line);
+	background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.guess-opts button:hover { border-color: var(--front); }
+.guess-opts button.right { border-color: var(--front); background: var(--front-soft); }
+.guess-opts button.wrong { border-color: var(--danger); color: var(--danger); }
+.guess-why { margin: 0; font-size: 15px; }
+
+.controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.btn {
+	font: inherit; font-weight: 500; font-size: 15px;
+	padding: 8px 16px; border-radius: 9px; cursor: pointer;
+	border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+}
+.btn.primary { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.btn:disabled { opacity: .4; cursor: default; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; flex: 1; justify-content: flex-end; }
+.dot {
+	width: 10px; height: 10px; border-radius: 50%; padding: 0; cursor: pointer;
+	border: 1px solid var(--muted); background: transparent;
+}
+.dot.done { background: var(--muted); }
+.dot.now { background: var(--front); border-color: var(--front); transform: scale(1.25); }
+button:focus-visible { outline: 2px solid var(--front); outline-offset: 2px; }
+.hint { font-size: 13px; color: var(--muted); }
+
+.code { background: var(--code-bg); color: var(--code-fg); border-radius: 12px; overflow: hidden; }
+.code-head { display: flex; justify-content: space-between; padding: 8px 14px; font-family: var(--font-mono); font-size: 12px; color: var(--code-dim); border-bottom: 1px solid rgba(255,255,255,.08); }
+.code pre { margin: 0; padding: 8px 0; overflow-x: auto; font-family: var(--font-mono); font-size: 13px; line-height: 1.6; }
+.ln { display: block; padding: 0 14px 0 0; white-space: pre; transition: background .25s; }
+.ln .no { display: inline-block; width: 44px; padding-right: 12px; text-align: right; color: var(--code-dim); user-select: none; }
+.ln.hl { background: var(--code-hl); }
+.ln.hl .no { color: var(--code-fg); }
+.kw { color: var(--code-kw); }
+.cm { color: var(--code-dim); font-style: italic; }
+
+.watch { padding: 14px 16px; }
+.watch h3 { margin: 0 0 8px; font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+.watch dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; font-family: var(--font-mono); font-size: 14px; font-variant-numeric: tabular-nums; }
+.watch dt { color: var(--muted); }
+.watch dd { margin: 0; }
+.watch .changed { animation: flash .8s; }
+@keyframes flash { from { background: var(--front-soft); } to { background: transparent; } }
+
+footer { font-size: 14px; color: var(--muted); }
+footer a { color: var(--front); }
+
+/* SVG diagram */
+.node { transition: transform .45s cubic-bezier(.3,.7,.3,1), opacity .45s; }
+.node rect.box { fill: var(--surface-2); stroke: var(--ink); stroke-width: 1.5; }
+.node.dropped rect.box { stroke-dasharray: 5 4; }
+.node line.div { stroke: var(--line); stroke-width: 1.2; }
+.node text.val { font-family: var(--font-mono); font-size: 17px; font-weight: 600; fill: var(--ink); text-anchor: middle; dominant-baseline: central; }
+.node text.val.garbage { fill: var(--danger); font-size: 14px; }
+.node text.idx { font-family: var(--font-mono); font-size: 11px; fill: var(--muted); text-anchor: middle; }
+.node .nil { stroke: var(--muted); stroke-width: 1.2; }
+.node rect.ring { fill: none; stroke: var(--back); stroke-width: 2; stroke-dasharray: 4 4; }
+.tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .08em; fill: var(--muted); }
+.arrows path { fill: none; stroke-width: 1.6; }
+.arrows .nx { stroke: var(--ink); }
+.arrows .pv { stroke: var(--muted); }
+.arrows .acc { stroke: var(--front); stroke-width: 2.6; }
+.arrows .ghost { opacity: .35; stroke-dasharray: 3 3; }
+.arrows { animation: fadein .35s .2s both; }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+.ptr { transition: transform .45s cubic-bezier(.3,.7,.3,1), opacity .3s; }
+.ptr rect { rx: 6; }
+.ptr.front rect { fill: var(--front); }
+.ptr.back rect { fill: var(--back); }
+.ptr.front path { fill: var(--front); }
+.ptr.back path { fill: var(--back); }
+.ptr text { font-family: var(--font-mono); font-size: 13px; font-weight: 600; fill: var(--surface); text-anchor: middle; dominant-baseline: central; }
+.legend text { font-family: var(--font-mono); font-size: 11px; fill: var(--muted); }
+.mk-nx { fill: var(--ink); } .mk-pv { fill: var(--muted); } .mk-acc { fill: var(--front); }
+
+@media (prefers-reduced-motion: reduce) {
+	.node, .ptr, .ln { transition: none; }
+	.arrows, .watch .changed { animation: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+	<header>
+		<div class="eyebrow">dlist 系列 · 雙向串列 · 刪中間節點</div>
+		<h1>刪中間節點：兩個人從頭尾往中間走</h1>
+		<p class="lede">不知道串列有多長，也能一趟找到正中間。按「下一步」，看 <span class="f">front</span> 和 <span class="b">back</span> 怎麼走、哪幾根線被改掉、記憶體怎麼還回去。</p>
+	</header>
+
+	<div class="bench">
+		<div class="col">
+			<div class="card stage">
+				<svg id="svg" viewBox="0 0 760 300" role="img" aria-label="雙向串列示意圖">
+					<defs>
+						<marker id="m-nx" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-nx" d="M0,0 L10,5 L0,10 z"/></marker>
+						<marker id="m-pv" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-pv" d="M0,0 L10,5 L0,10 z"/></marker>
+						<marker id="m-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="mk-acc" d="M0,0 L10,5 L0,10 z"/></marker>
+					</defs>
+					<g class="legend">
+						<line x1="16" y1="18" x2="40" y2="18" stroke="var(--ink)" stroke-width="1.6" marker-end="url(#m-nx)"/>
+						<text x="46" y="22">next</text>
+						<line x1="96" y1="18" x2="120" y2="18" stroke="var(--muted)" stroke-width="1.6" marker-end="url(#m-pv)"/>
+						<text x="126" y="22">prev</text>
+					</g>
+					<g id="arrows-layer"></g>
+					<g id="nodes-layer"></g>
+					<g id="ptr-layer"></g>
+				</svg>
+			</div>
+
+			<div class="card narr">
+				<div class="narr-top">
+					<h2 id="title"></h2>
+					<span class="count" id="count"></span>
+				</div>
+				<div class="body" id="body"></div>
+				<div class="guess" id="guess" hidden>
+					<div class="guess-q" id="guess-q"></div>
+					<div class="guess-opts" id="guess-opts"></div>
+					<p class="guess-why" id="guess-why" hidden></p>
+				</div>
+				<div class="controls">
+					<button class="btn" id="prev" type="button">← 上一步</button>
+					<button class="btn primary" id="next" type="button">下一步 →</button>
+					<div class="dots" id="dots"></div>
+				</div>
+				<div class="hint">鍵盤 ← → 也可以切換。</div>
+			</div>
+		</div>
+
+		<div class="col">
+			<div class="code">
+				<div class="code-head"><span>dlist.c</span><span>dl_delete_mid()</span></div>
+				<pre id="code"></pre>
+			</div>
+			<div class="card watch">
+				<h3>變數現在是多少</h3>
+				<dl id="watch"></dl>
+			</div>
+		</div>
+	</div>
+
+	<footer>程式碼取自我的練習 repo：<code class="m">phase2-data-structures/06b_dlist/dlist.c:164</code>。這一課背後的故事（包括那個 ASan 才抓得到的洩漏）寫在<a href="https://ryangtr.github.io/delete-middle-two-pointer/">部落格文章</a>。</footer>
+</div>
+
+<script>
+(function () {
+	var CODE = [
+		[164, 'bool dl_delete_mid(struct dlist *l)'],
+		[165, '{'],
+		[166, '\tstruct dnode *front, *back;'],
+		[167, ''],
+		[168, '\tif (!l || !l->head)'],
+		[169, '\t\treturn false;'],
+		[170, ''],
+		[171, '\tfront = l->head;'],
+		[172, '\tback = l->tail;'],
+		[173, ''],
+		[174, '\twhile (front != back && front->next != back) {'],
+		[175, '\t\tfront = front->next;'],
+		[176, '\t\tback = back->prev;'],
+		[177, '\t}'],
+		[178, ''],
+		[179, '\tif (back->prev)'],
+		[180, '\t\tback->prev->next = back->next;'],
+		[181, '\telse'],
+		[182, '\t\tl->head = back->next;'],
+		[183, ''],
+		[184, '\tif (back->next)'],
+		[185, '\t\tback->next->prev = back->prev;'],
+		[186, '\telse'],
+		[187, '\t\tl->tail = back->prev;'],
+		[188, ''],
+		[189, '\tfree(back->value);'],
+		[190, '\tfree(back);'],
+		[191, ''],
+		[192, '\treturn true;'],
+		[193, '}']
+	];
+
+	var L6 = ['12', '20', '27', '35', '41', '58'];
+	var L5 = ['12', '20', '27', '35', '41'];
+	var L1 = ['7'];
+
+	function chain(n) {
+		var nx = [], pv = [];
+		for (var i = 0; i < n; i++) {
+			nx.push(i + 1 < n ? i + 1 : null);
+			pv.push(i > 0 ? i - 1 : null);
+		}
+		return { nx: nx, pv: pv };
+	}
+	function S(list, o) {
+		var c = chain(list.length);
+		var s = {
+			id: list.join('-'), list: list, nx: c.nx, pv: c.pv,
+			front: null, back: null, removed: null, valFreed: false, nodeFreed: false,
+			head: 0, tail: list.length - 1, ring: null, acc: [], cond: false, hl: []
+		};
+		for (var k in o) s[k] = o[k];
+		return s;
+	}
+	function cut(list, mid, extra) {
+		var c = chain(list.length);
+		if (mid > 0) c.nx[mid - 1] = c.nx[mid];
+		if (mid < list.length - 1) c.pv[mid + 1] = c.pv[mid];
+		var o = { nx: c.nx, pv: c.pv, removed: mid, front: mid > 0 ? mid - 1 : mid, back: mid };
+		for (var k in extra) o[k] = extra[k];
+		return S(list, o);
+	}
+
+	var STEPS = [
+		{
+			t: '目標：刪掉正中間那節車廂',
+			b: '<p>把雙向串列想成一列火車。每節車廂（節點）有兩個掛勾：<code>next</code> 勾住後一節，<code>prev</code> 勾住前一節。</p><p>這列有 6 節。偶數個會有兩節「中間」，規則選後面那節：從 0 開始數第 ⌊n/2⌋ 節，也就是第 3 節的 <b class="b">35</b>。</p>',
+			s: S(L6, { ring: 3, hl: [164] })
+		},
+		{
+			t: '麻煩的是：我們不知道 n',
+			b: '<p>函式手上只有 <code>l</code>，裡面是車頭 <code>head</code> 和車尾 <code>tail</code>，沒有長度。</p><p>笨方法是先從頭走到尾數一遍，再走一半。雙向串列有更省的辦法：派兩個人，一個從車頭、一個從車尾，<b>同時</b>往中間走。</p><p>開始之前先擋掉空串列：沒車廂可刪，直接回 <code>false</code>。</p>',
+			s: S(L6, { ring: 3, hl: [168, 169] })
+		},
+		{
+			t: '兩個人就位',
+			b: '<p><span class="f">front</span> 站車頭，<span class="b">back</span> 站車尾。</p>',
+			s: S(L6, { front: 0, back: 5, hl: [171, 172] })
+		},
+		{
+			t: '還要繼續走嗎？',
+			b: '<p>每走一步前都要問兩件事：</p><p>① 兩人站在同一節了嗎？（<code>front != back</code>）<br>② 兩人已經肩並肩了嗎？（<code>front-&gt;next != back</code>）</p><p>現在 12 和 58 隔很遠，兩個答案都是「還沒」，所以進迴圈。</p>',
+			s: S(L6, { front: 0, back: 5, cond: true, hl: [174] })
+		},
+		{
+			t: '一起走一步',
+			b: '<p><span class="f">front</span> 順著 <code>next</code> 往後走一節，<span class="b">back</span> 順著 <code>prev</code> 往前走一節。</p><p>注意 back 用的是 <code>prev</code>。單向串列沒有這根線，所以不能這樣做。</p>',
+			s: S(L6, { front: 1, back: 4, hl: [175, 176] })
+		},
+		{
+			t: '再問一次，再走一步',
+			b: '<p>20 和 41 還沒碰頭，也還沒相鄰，於是再走一步：front 到 27，back 到 35。</p>',
+			s: S(L6, { front: 2, back: 3, hl: [174, 175, 176] })
+		},
+		{
+			t: '這次還走嗎？',
+			b: '<p>現在 <span class="f">front</span> 在 27，<span class="b">back</span> 在 35。先猜，再看答案。</p>',
+			s: S(L6, { front: 2, back: 3, cond: true, hl: [174] }),
+			g: {
+				q: 'while 條件現在是 true 還是 false？',
+				opts: [
+					{ t: 'true，繼續走', ok: false },
+					{ t: 'false，停下來', ok: true }
+				],
+				why: '27 的 next 就是 35，也就是 front-&gt;next == back。兩人肩並肩了，條件 ② 不成立，迴圈結束。'
+			}
+		},
+		{
+			t: '為什麼要刪 back？',
+			b: '<p>偶數個車廂時，兩人會停在相鄰的兩節，<span class="b">back</span> 站的是右邊那節，剛好是第 n/2 節。</p><p>奇數個時兩人會站在同一節（等一下會看到）。兩種情況下，刪 <span class="b">back</span> 都對，所以後面的程式只處理 back。</p>',
+			s: S(L6, { front: 2, back: 3, ring: 3, hl: [179] })
+		},
+		{
+			t: '拆掛勾 ①：前一節跳過它',
+			b: '<p><code>back-&gt;prev-&gt;next = back-&gt;next;</code></p><p>白話：叫 back 前面那節（27）把 next 改勾到 back 後面那節（41）。綠色那根就是剛改的線。</p>',
+			s: (function () { var s = S(L6, { front: 2, back: 3, hl: [179, 180], acc: ['n2'] }); s.nx[2] = 4; return s; })()
+		},
+		{
+			t: '拆掛勾 ②：後一節也跳過它',
+			b: '<p><code>back-&gt;next-&gt;prev = back-&gt;prev;</code></p><p>41 的 prev 改勾回 27。現在不管從車頭還是車尾走，都碰不到 35 了，它被「拔出」車隊。</p><p>35 自己的兩根線還指著舊鄰居（虛線），但已經沒人指向它。</p>',
+			s: cut(L6, 3, { front: 2, hl: [184, 185], acc: ['p4'] })
+		},
+		{
+			t: '還記憶體 ①：先丟盒子裡的東西',
+			b: '<p>節點裡的 <code>value</code> 是插入時另外 <code>malloc</code> 來的字串，這節點是它唯一的主人。先把它還掉。</p>',
+			s: cut(L6, 3, { front: 2, valFreed: true, hl: [189] })
+		},
+		{
+			t: '還記憶體 ②：再丟盒子本身',
+			b: '<p><code>free(back)</code> 把節點這個 <code>struct</code> 也還掉。64 位元機器上，一個 <code>struct dnode</code> 是 3 個指標，24 bytes。</p><p>少了這一行，<b>測試照樣全過</b>：串列已經看不到它，數長度、印內容都正常。只有 ASan 或 valgrind 會告訴你「有 24 bytes 沒人還」。</p><p>我自己冷寫時漏的是另一個盒子：<code>dl_free</code> 把每個節點都還了，卻忘了 <code>free(l)</code>，也就是裝著 head 和 tail 的那個 <code>struct dlist</code>。道理一樣：外面的盒子也要自己丟。</p>',
+			s: cut(L6, 3, { front: 2, valFreed: true, nodeFreed: true, hl: [190, 192] })
+		},
+		{
+			t: '換成奇數個試試',
+			b: '<p>換一列 5 節的火車。⌊5/2⌋ = 2，目標是第 2 節的 <b class="b">27</b>。兩人照樣站頭尾。</p>',
+			s: S(L5, { front: 0, back: 4, ring: 2, hl: [171, 172] })
+		},
+		{
+			t: '走一步',
+			b: '<p>12 和 41 還沒碰頭，走：front 到 20，back 到 35。</p>',
+			s: S(L5, { front: 1, back: 3, ring: 2, hl: [174, 175, 176] })
+		},
+		{
+			t: '再走一步，兩人撞在一起',
+			b: '<p>20 的 next 是 27，不是 35，所以還沒相鄰，再走一步。這次兩人站到同一節 27。</p>',
+			s: S(L5, { front: 2, back: 2, ring: 2, cond: true, hl: [174, 175, 176] }),
+			g: {
+				q: '這次讓迴圈停下來的是哪個條件？',
+				opts: [
+					{ t: 'front == back', ok: true },
+					{ t: 'front->next == back', ok: false }
+				],
+				why: '兩人站在同一節，條件 ①（front != back）先不成立。奇數個時一定是這樣停；偶數個時則是條件 ②。這就是「對撞法」名字的由來。'
+			}
+		},
+		{
+			t: '同樣四行拆線，兩次 free',
+			b: '<p>back 指著 27，接下來的程式一模一樣：20 改勾 35、35 改勾 20，再把字串和節點都還掉。</p>',
+			s: cut(L5, 2, { front: 2, valFreed: true, nodeFreed: true, hl: [179, 180, 184, 185, 189, 190] })
+		},
+		{
+			t: '邊界：只剩一節車廂',
+			b: '<p>只有 1 節時，front 和 back 一開始就站在一起，迴圈一次都不跑。</p><p>這時 <code>back-&gt;prev</code> 是 <code>NULL</code>，沒有前一節可改，所以走 <code>else</code>：直接改 <code>l-&gt;head</code>。<code>tail</code> 也一樣。刪完 head 和 tail 都變 <code>NULL</code>，串列變空。</p><p>那兩個 <code>if/else</code> 就是為了車頭和車尾這兩種邊界寫的。</p>',
+			s: S(L1, { front: 0, back: 0, removed: 0, head: null, tail: null, hl: [179, 181, 182, 184, 186, 187] })
+		},
+		{
+			t: '整理一下',
+			b: '<p>兩人各走約 n/2 步，所以時間是 <b>O(n)</b>；只多用了兩個指標，空間是 <b>O(1)</b>。</p><div class="tablewrap"><table><tr><th></th><th>對撞法（本課）</th><th>快慢指標</th></tr><tr><td>怎麼走</td><td>頭尾各一人，往中間走</td><td>都從頭出發，快的一次走 2 步</td></tr><tr><td>需要 prev</td><td>要</td><td>不用</td></tr><tr><td>單向串列</td><td>不能用</td><td>能用</td></tr><tr><td>雙向串列</td><td>能用</td><td>能用</td></tr></table></div><p>自己動手：把程式碼蓋住，在白紙上寫出 <code>dl_delete_mid</code>，再用 1、2、5、6 個節點各跑一次。</p>',
+			s: cut(L6, 3, { front: null, back: null, valFreed: true, nodeFreed: true, hl: [] })
+		}
+	];
+
+	/* ---------- geometry ---------- */
+	var W = 88, H = 56, GAP = 36, ROW = 104, DROP = 92, VBW = 760;
+	function xOf(i, n) {
+		var total = n * W + (n - 1) * GAP;
+		return (VBW - total) / 2 + i * (W + GAP);
+	}
+	function yOf(s, i) { return (s.removed === i) ? ROW + DROP : ROW; }
+
+	var SVGNS = 'http://www.w3.org/2000/svg';
+	function el(tag, attrs, parent) {
+		var e = document.createElementNS(SVGNS, tag);
+		for (var k in attrs) e.setAttribute(k, attrs[k]);
+		if (parent) parent.appendChild(e);
+		return e;
+	}
+
+	var nodesLayer = document.getElementById('nodes-layer');
+	var arrowsLayer = document.getElementById('arrows-layer');
+	var ptrLayer = document.getElementById('ptr-layer');
+	var currentId = null, nodeEls = [], ptrs = {};
+
+	function buildNodes(s) {
+		nodesLayer.innerHTML = '';
+		nodeEls = [];
+		var n = s.list.length;
+		s.list.forEach(function (v, i) {
+			var g = el('g', { 'class': 'node' }, nodesLayer);
+			g.style.transform = 'translate(' + xOf(i, n) + 'px,' + ROW + 'px)';
+			el('rect', { 'class': 'ring', x: -6, y: -6, width: W + 12, height: H + 12, rx: 12 }, g);
+			el('rect', { 'class': 'box', x: 0, y: 0, width: W, height: H, rx: 8 }, g);
+			el('line', { 'class': 'div', x1: 20, y1: 0, x2: 20, y2: H }, g);
+			el('line', { 'class': 'div', x1: W - 20, y1: 0, x2: W - 20, y2: H }, g);
+			var t = el('text', { 'class': 'val', x: W / 2, y: H / 2 }, g);
+			t.textContent = v;
+			var ix = el('text', { 'class': 'idx', x: W / 2, y: H + 16 }, g);
+			ix.textContent = '[' + i + ']';
+			var nilN = el('line', { 'class': 'nil', x1: W - 16, y1: H - 6, x2: W - 4, y2: 6 }, g);
+			var nilP = el('line', { 'class': 'nil', x1: 4, y1: H - 6, x2: 16, y2: 6 }, g);
+			nodeEls.push({ g: g, val: t, ring: g.firstChild, nilN: nilN, nilP: nilP, v: v });
+		});
+		/* HEAD / TAIL tags */
+		var head = el('text', { 'class': 'tag', id: 'tag-head' }, nodesLayer);
+		head.textContent = 'HEAD';
+		var tail = el('text', { 'class': 'tag', id: 'tag-tail', 'text-anchor': 'end' }, nodesLayer);
+		tail.textContent = 'TAIL';
+	}
+
+	function buildPtrs() {
+		ptrLayer.innerHTML = '';
+		['front', 'back'].forEach(function (name) {
+			var g = el('g', { 'class': 'ptr ' + name }, ptrLayer);
+			el('rect', { x: -32, y: -12, width: 64, height: 24 }, g);
+			var t = el('text', { x: 0, y: 0 }, g);
+			t.textContent = name;
+			if (name === 'front')
+				el('path', { d: 'M-6,12 L6,12 L0,20 z' }, g);
+			else
+				el('path', { d: 'M-6,-12 L6,-12 L0,-20 z' }, g);
+			ptrs[name] = g;
+		});
+	}
+
+	function arrowPath(s, kind, from, to) {
+		var n = s.list.length;
+		var xf = xOf(from, n), yf = yOf(s, from);
+		var xt = xOf(to, n), yt = yOf(s, to);
+		var sx, sy, ex, ey;
+		if (kind === 'nx') {
+			sx = xf + W - 10; sy = yf + 20; ex = xt - 2; ey = yt + 20;
+		} else {
+			sx = xf + 10; sy = yf + 36; ex = xt + W + 2; ey = yt + 36;
+		}
+		var adjacent = Math.abs(to - from) === 1;
+		if (adjacent || yf !== yt)
+			return 'M' + sx + ',' + sy + ' L' + ex + ',' + ey;
+		var bend = kind === 'nx' ? -62 : 62;
+		var dir = ex > sx ? 1 : -1;
+		return 'M' + sx + ',' + sy + ' C' + (sx + 40 * dir) + ',' + (sy + bend) + ' ' +
+			(ex - 40 * dir) + ',' + (ey + bend) + ' ' + ex + ',' + ey;
+	}
+
+	function render(s) {
+		if (s.id !== currentId) {
+			buildNodes(s);
+			if (!ptrs.front) buildPtrs();
+			currentId = s.id;
+		}
+		var n = s.list.length;
+
+		nodeEls.forEach(function (ne, i) {
+			var gone = s.nodeFreed && s.removed === i;
+			var dropped = s.removed === i;
+			ne.g.style.transform = 'translate(' + xOf(i, n) + 'px,' + yOf(s, i) + 'px)' + (gone ? ' scale(.6)' : '');
+			ne.g.style.opacity = gone ? 0 : (dropped ? .75 : 1);
+			ne.g.classList.toggle('dropped', dropped);
+			ne.ring.style.display = s.ring === i ? '' : 'none';
+			if (dropped && s.valFreed) {
+				ne.val.textContent = '???';
+				ne.val.classList.add('garbage');
+			} else {
+				ne.val.textContent = ne.v;
+				ne.val.classList.remove('garbage');
+			}
+			ne.nilN.style.display = s.nx[i] === null ? '' : 'none';
+			ne.nilP.style.display = s.pv[i] === null ? '' : 'none';
+		});
+
+		var ht = document.getElementById('tag-head');
+		var tt = document.getElementById('tag-tail');
+		if (s.head === null) { ht.style.display = 'none'; } else {
+			ht.style.display = '';
+			ht.setAttribute('x', xOf(s.head, n));
+			ht.setAttribute('y', ROW - 10);
+		}
+		if (s.tail === null) { tt.style.display = 'none'; } else {
+			tt.style.display = '';
+			tt.setAttribute('x', xOf(s.tail, n) + W);
+			tt.setAttribute('y', ROW - 10);
+		}
+
+		/* arrows: rebuilt each step, fade in after nodes move */
+		var layer = el('g', { 'class': 'arrows' });
+		s.list.forEach(function (v, i) {
+			if (s.nodeFreed && s.removed === i)
+				return;
+			[['nx', s.nx[i]], ['pv', s.pv[i]]].forEach(function (pair) {
+				var kind = pair[0], to = pair[1];
+				if (to === null)
+					return;
+				if (s.nodeFreed && s.removed === to)
+					return;
+				var acc = s.acc.indexOf(kind[0] + i) >= 0;
+				var cls = kind + (acc ? ' acc' : '') + (s.removed === i ? ' ghost' : '');
+				el('path', {
+					'class': cls, d: arrowPath(s, kind, i, to),
+					'marker-end': 'url(#m-' + (acc ? 'acc' : kind) + ')'
+				}, layer);
+			});
+		});
+		arrowsLayer.innerHTML = '';
+		arrowsLayer.appendChild(layer);
+
+		/* pointers */
+		['front', 'back'].forEach(function (name) {
+			var idx = s[name], g = ptrs[name];
+			if (idx === null || (s.nodeFreed && s.removed === idx && name === 'front')) {
+				g.style.opacity = 0;
+				return;
+			}
+			var cx = xOf(idx, n) + W / 2;
+			var y = name === 'front' ? ROW - 40 : yOf(s, idx) + H + 40;
+			if (name === 'back' && s.nodeFreed && s.removed === idx) {
+				g.style.opacity = 0;
+				return;
+			}
+			g.style.opacity = 1;
+			g.style.transform = 'translate(' + cx + 'px,' + y + 'px)';
+		});
+	}
+
+	/* ---------- code panel ---------- */
+	function esc(t) { return t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+	function hilite(t) {
+		var h = esc(t.replace(/\t/g, '        '));
+		return h.replace(/\b(bool|struct|if|else|while|return|false|true)\b/g, '<span class="kw">$1</span>');
+	}
+	var codeEl = document.getElementById('code');
+	var lineEls = {};
+	CODE.forEach(function (row) {
+		var span = document.createElement('span');
+		span.className = 'ln';
+		span.innerHTML = '<span class="no">' + row[0] + '</span>' + hilite(row[1]);
+		codeEl.appendChild(span);
+		lineEls[row[0]] = span;
+	});
+
+	/* ---------- watch ---------- */
+	var watchEl = document.getElementById('watch');
+	var lastWatch = {};
+	function nameOf(s, i) {
+		if (i === null || i === undefined)
+			return 'NULL';
+		if (s.removed === i && s.nodeFreed)
+			return '(已 free)';
+		return s.list[i];
+	}
+	function renderWatch(s, revealed) {
+		var rows = [
+			['l->head', s.head === null ? 'NULL' : s.list[s.head]],
+			['l->tail', s.tail === null ? 'NULL' : s.list[s.tail]],
+			['front', s.front === null ? '—' : nameOf(s, s.front)],
+			['back', s.back === null ? '—' : nameOf(s, s.back)],
+			['front->next', s.front === null ? '—' : nameOf(s, s.nx[s.front])]
+		];
+		var condTxt = '—';
+		if (s.cond) {
+			var c = s.front !== s.back && s.nx[s.front] !== s.back;
+			condTxt = revealed ? (c ? 'true → 繼續走' : 'false → 停') : '？先猜猜看';
+		}
+		rows.push(['while 條件', condTxt]);
+		watchEl.innerHTML = '';
+		rows.forEach(function (r) {
+			var dt = document.createElement('dt');
+			dt.textContent = r[0];
+			var dd = document.createElement('dd');
+			dd.textContent = r[1];
+			if (lastWatch[r[0]] !== undefined && lastWatch[r[0]] !== r[1])
+				dd.className = 'changed';
+			watchEl.appendChild(dt);
+			watchEl.appendChild(dd);
+			lastWatch[r[0]] = r[1];
+		});
+	}
+
+	/* ---------- navigation ---------- */
+	var cur = 0, answered = {};
+	var dotsEl = document.getElementById('dots');
+	STEPS.forEach(function (st, i) {
+		var d = document.createElement('button');
+		d.type = 'button';
+		d.className = 'dot';
+		d.setAttribute('aria-label', '第 ' + (i + 1) + ' 步：' + st.t);
+		d.addEventListener('click', function () { go(i); });
+		dotsEl.appendChild(d);
+	});
+
+	function renderGuess(step, i) {
+		var box = document.getElementById('guess');
+		if (!step.g) { box.hidden = true; return; }
+		box.hidden = false;
+		document.getElementById('guess-q').textContent = step.g.q;
+		var why = document.getElementById('guess-why');
+		var opts = document.getElementById('guess-opts');
+		opts.innerHTML = '';
+		step.g.opts.forEach(function (o, k) {
+			var b = document.createElement('button');
+			b.type = 'button';
+			b.textContent = o.t;
+			if (answered[i] !== undefined) {
+				if (o.ok) b.classList.add('right');
+				else if (answered[i] === k) b.classList.add('wrong');
+			}
+			b.addEventListener('click', function () {
+				answered[i] = k;
+				renderGuess(step, i);
+				renderWatch(step.s, true);
+			});
+			opts.appendChild(b);
+		});
+		if (answered[i] !== undefined) {
+			var ok = step.g.opts[answered[i]].ok;
+			why.hidden = false;
+			why.innerHTML = (ok ? '<b class="f">答對了。</b>' : '<b class="b">不是喔。</b>') + step.g.why;
+		} else {
+			why.hidden = true;
+		}
+	}
+
+	function go(i) {
+		cur = Math.max(0, Math.min(STEPS.length - 1, i));
+		var step = STEPS[cur];
+		document.getElementById('title').textContent = step.t;
+		document.getElementById('body').innerHTML = step.b;
+		document.getElementById('count').textContent = (cur + 1) + ' / ' + STEPS.length;
+		render(step.s);
+		Object.keys(lineEls).forEach(function (k) {
+			lineEls[k].classList.toggle('hl', step.s.hl.indexOf(+k) >= 0);
+		});
+		var revealed = !step.g || answered[cur] !== undefined;
+		renderWatch(step.s, revealed);
+		renderGuess(step, cur);
+		document.getElementById('prev').disabled = cur === 0;
+		var nb = document.getElementById('next');
+		nb.disabled = cur === STEPS.length - 1;
+		nb.textContent = cur === STEPS.length - 1 ? '完成' : '下一步 →';
+		Array.prototype.forEach.call(dotsEl.children, function (d, k) {
+			d.className = 'dot' + (k < cur ? ' done' : '') + (k === cur ? ' now' : '');
+		});
+		try { history.replaceState(null, '', '#s' + (cur + 1)); } catch (e) {}
+	}
+
+	document.getElementById('prev').addEventListener('click', function () { go(cur - 1); });
+	document.getElementById('next').addEventListener('click', function () { go(cur + 1); });
+	document.addEventListener('keydown', function (e) {
+		if (e.target && /INPUT|TEXTAREA/.test(e.target.tagName))
+			return;
+		if (e.key === 'ArrowRight') go(cur + 1);
+		if (e.key === 'ArrowLeft') go(cur - 1);
+	});
+	var m = /^#s(\d+)$/.exec(location.hash || '');
+	go(m ? (+m[1] - 1) : 0);
+})();
+</script>
+</body>
+</html>
